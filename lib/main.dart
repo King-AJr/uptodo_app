@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uptodo/screens/bottom_nav_bar.dart';
 import 'package:uptodo/screens/intro.dart';
 import 'package:uptodo/screens/onboarding.dart';
 import 'package:get/get.dart';
@@ -17,10 +18,11 @@ class MyApp extends StatelessWidget {
       title: 'My Flutter App',
       themeMode: ThemeMode.system,
       theme: myAppTheme.myThemes,
-      initialRoute: '/onboarding',
+      initialRoute: '/intro',
       routes: {
         '/intro': (context) => const IntroScreen(),
-        '/onboarding': (context) => const OnboardingScreen()
+        '/onboarding': (context) => const OnboardingScreen(),
+        '/BottomNavBar': (context) => BottomNavBar()
       },
     );
   }

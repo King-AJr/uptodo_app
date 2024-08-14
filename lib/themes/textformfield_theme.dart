@@ -4,19 +4,19 @@ import 'package:uptodo/constants/colors.dart';
 class MyTextFieldTheme {
   MyTextFieldTheme._();
 
-  static InputDecorationTheme lightInputDecorationTheme = InputDecorationTheme(
+  static InputDecorationTheme MyInputDecorationTheme = InputDecorationTheme(
     errorMaxLines: 3,
     prefixIconColor: Colors.grey,
     suffixIconColor: Colors.grey,
     labelStyle: const TextStyle().copyWith(
       fontSize: 16,
       fontFamily: "latoRegular",
-      color: hintText,
+      color: hintColor,
     ),
     hintStyle: const TextStyle().copyWith(
       fontSize: 16,
       fontFamily: "latoRegular",
-      color: hintText,
+      color: hintColor,
     ),
     errorStyle: const TextStyle().copyWith(
       fontSize: 16,

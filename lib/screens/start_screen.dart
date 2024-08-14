@@ -12,7 +12,6 @@ class StartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
-        leading: const Icon(Icons.arrow_back_ios_new_outlined),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),

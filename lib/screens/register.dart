@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:uptodo/constants/colors.dart';
 import 'package:uptodo/constants/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
-import 'package:uptodo/screens/register.dart';
+import 'package:uptodo/screens/bottom_nav_bar.dart';
+import 'package:uptodo/screens/login.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +15,12 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: bgColor,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(30),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             alignment: AlignmentDirectional.bottomStart,
             child: Text(
-              'Login',
+              'Register',
               style: s32BoldWhite.copyWith(color: white87),
             ),
           ),
@@ -32,9 +33,6 @@ class LoginScreen extends StatelessWidget {
           child: Form(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
                 CustomTextField(
                   label: "Username",
                   hintText: "Enter your username",
@@ -45,17 +43,24 @@ class LoginScreen extends StatelessWidget {
                   hintText: "********",
                   isPassword: true,
                 ),
+                CustomTextField(
+                  label: "Confirm Password",
+                  hintText: "********",
+                  isPassword: true,
+                ),
                 const SizedBox(
-                  height: 50,
+                  height: 25,
                 ),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Login'),
+                    onPressed: () {
+                      Get.offAll(() => BottomNavBar());
+                    },
+                    child: const Text('Register'),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,7 +82,7 @@ class LoginScreen extends StatelessWidget {
                         child: Divider(color: greyBorder, thickness: 1)),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
@@ -91,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                           child: Image.asset('assets/images/google_logo.png'),
                         ),
                         const SizedBox(width: 10),
-                        Text("Login with Google", style: s16RegWhite87),
+                        Text("Register with Google", style: s16RegWhite87),
                       ],
                     ),
                   ),
@@ -112,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                           child: Image.asset('assets/images/apple_logo.png'),
                         ),
                         const SizedBox(width: 10),
-                        Text("Login with Apple", style: s16RegWhite87),
+                        Text("Register with Apple", style: s16RegWhite87),
                       ],
                     ),
                   ),
@@ -122,20 +127,15 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      "Already have an account?",
                       style: s16RegWhite87.copyWith(color: greyBorder),
                     ),
                     TextButton(
-                      onPressed: () {
-                        Get.to(() => const RegisterScreen());
-                      },
-                      child: Text(
-                        "Register",
-                        style: s16RegWhite40.copyWith(
-                          color: appWhite,
-                        ),
-                      ),
-                    ),
+                        onPressed: () {
+                          Get.off(() => const LoginScreen());
+                        },
+                        child: Text("Login",
+                            style: s16RegWhite40.copyWith(color: appWhite)))
                   ],
                 )
               ],

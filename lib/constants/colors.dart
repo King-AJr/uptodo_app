@@ -6,7 +6,11 @@ const Color appPurple = Color(0xFF8875FF);
 
 const Color appWhite = Color(0xFFFFFFFF);
 
+const Color tagPurple = Color(0xff809CFF);
+
 const Color purpleBorder = Color(0xFF8E7CFF);
+
+const Color purpleButton = Color(0xFF8687E7);
 
 const Color greyBorder = Color(0xFF979797);
 
@@ -26,4 +30,8 @@ const Color white87 = Color.fromRGBO(255, 255, 255, 0.87);
 
 const Color white67 = Color.fromRGBO(255, 255, 255, 0.67);
 
-const Color hintText = Color(0xff535353);
+const Color white21 = Color.fromRGBO(255, 255, 255, 0.21);
+
+const Color hintColor = Color(0xff535353);
+
+const Color bottomNavBar = Color(0xff363636);

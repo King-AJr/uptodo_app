@@ -14,6 +14,8 @@ class MyOutlineButtonTheme {
         borderRadius: BorderRadius.circular(10),
       ),
       fixedSize: const Size(150, 48),
+      textStyle: const TextStyle(
+          color: white87, fontSize: 18, fontFamily: 'latoRegular'),
     ),
   );
 }

@@ -30,7 +30,7 @@ class OnboardingScreen extends StatelessWidget {
       ),
       body: IntroductionScreen(
         globalBackgroundColor: bgColor,
-        controlsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
+        controlsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 60),
         pages: [
           PageViewModel(
             title: '',
@@ -133,7 +133,7 @@ class OnboardingScreen extends StatelessWidget {
         done: OnboardingButton(
           width: 200,
           child: Text(
-            "GET STARTED",
+            "DONE",
             style: s16RegWhite40.copyWith(color: appWhite),
           ),
         ),

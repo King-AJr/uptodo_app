@@ -13,6 +13,12 @@ TextStyle s16RegWhite40 = TextStyle(
   color: white40,
 );
 
+TextStyle s12RegWhite = TextStyle(
+  fontFamily: 'latoRegular',
+  fontSize: 12,
+  color: appWhite,
+);
+
 TextStyle s32BoldWhite = const TextStyle(
   fontFamily: 'latoBold',
   fontSize: 32,
@@ -24,3 +30,6 @@ TextStyle s16RegWhite87 = TextStyle(
   fontSize: 16,
   color: white87,
 );
+
+TextStyle s18RegGrey =
+    TextStyle(fontFamily: 'latoRegular', fontSize: 18, color: greyText);
