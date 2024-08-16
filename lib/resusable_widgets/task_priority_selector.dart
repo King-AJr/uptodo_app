@@ -47,7 +47,7 @@ class _TaskPrioritySelectorState extends State<TaskPrioritySelector> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.flag, color: Colors.white),
+                    const Icon(Icons.flag, color: Colors.white),
                     Text(
                       '${index + 1}',
                       style: TextStyle(color: Colors.white),

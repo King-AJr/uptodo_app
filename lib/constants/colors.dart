@@ -35,3 +35,7 @@ const Color white21 = Color.fromRGBO(255, 255, 255, 0.21);
 const Color hintColor = Color(0xff535353);
 
 const Color bottomNavBar = Color(0xff363636);
+
+const Color workColor = Color(0xffFF9680);
+
+const Color buttonGrey = Color(0xff1D1D1D);

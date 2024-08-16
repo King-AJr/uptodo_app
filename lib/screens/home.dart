@@ -1,7 +1,10 @@
+// home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:uptodo/constants/colors.dart';
 import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/resusable_widgets/task_card.dart';
+import 'package:uptodo/utils/dummy_data.dart';
 
 class HomeScreen extends StatelessWidget {
   final bool empty;
@@ -95,33 +98,9 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 7.5),
-                      const TaskCard(
-                        title: 'Do Math Homework',
-                        time: '16:45',
-                        tagColor: tagPurple,
-                        taskCategory: 'University',
-                        tagIcon: Icon(Icons.school_outlined,
-                            color: Color(0xff0055A3), size: 12),
-                        priority: 1,
-                      ),
-                      const TaskCard(
-                        title: 'Take out Dogs',
-                        time: '18:20',
-                        tagColor: appOrange,
-                        taskCategory: 'Home',
-                        tagIcon: Icon(Icons.home_outlined,
-                            color: Color(0xffA30000), size: 12),
-                        priority: 2,
-                      ),
-                      const TaskCard(
-                        title: 'Business meeting with the CEO',
-                        time: '08:15',
-                        tagColor: appYellow,
-                        taskCategory: 'Work',
-                        tagIcon: Icon(Icons.business_center_outlined,
-                            color: Color(0xffA36200), size: 12),
-                        priority: 3,
-                      ),
+                      // Use the tasks from DummyData
+                      ...DummyData.tasks.map((task) => TaskCard(
+                      task: task)),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -153,9 +132,13 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 7.5),
-                      const TaskCard(
-                        title: 'Business meeting with the CEO',
-                        time: '08:15',
+                      // Example of a completed task
+                      TaskCard(
+                        task: Task(
+                            title: 'Business meeting with the CEO',
+                            time: '08:15',
+                            // Placeholder priority
+                          ),
                       ),
                     ],
                   )

@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:uptodo/constants/colors.dart';
 import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/resusable_widgets/category_dialog.dart';
+import 'package:uptodo/resusable_widgets/datetime_picker.dart';
+import 'package:uptodo/resusable_widgets/priority_dialog.dart';
 import 'package:uptodo/screens/home.dart';
+import 'package:uptodo/utils/helpers/helperFunctions.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
@@ -10,6 +14,7 @@ class BottomNavBar extends StatelessWidget {
   final _controller = PersistentTabController(initialIndex: 0);
   DateTime? selectedDateTime; // To store the selected date and time
   String? selectedCategory;
+  int? selectedPriority;
 
   @override
   Widget build(BuildContext context) {
@@ -134,18 +139,40 @@ class BottomNavBar extends StatelessWidget {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.timer_outlined, size: 24),
-                        onPressed: () => _selectDateTime(context),
+                        onPressed: () async {
+                          selectedDateTime = await pickDateTime(context);
+                          if (selectedDateTime != null) {
+                            print('Selected DateTime: $selectedDateTime');
+                          }
+                        },
                       ),
                       const SizedBox(width: 10),
                       IconButton(
                         icon: const Icon(Icons.sell_outlined, size: 24),
                         onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => CategoryDialog(
+                              onCategorySelected: (category) {
+                                selectedCategory = category;
+                              },
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(width: 10),
                       IconButton(
                         icon: const Icon(Icons.tour_outlined, size: 24),
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PriorityDialog(
+                              onPrioritySelected: (priority) {
+                                selectedPriority = priority;
+                              },
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -157,36 +184,5 @@ class BottomNavBar extends StatelessWidget {
         );
       },
     );
-  }
-
-  Future<void> _selectDateTime(BuildContext context) async {
-    // Show the date picker first
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (selectedDate != null) {
-      // Show the time picker next
-      TimeOfDay? selectedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-
-      // If a time was selected, combine date and time
-      if (selectedTime != null) {
-        selectedDateTime = DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
-
-        print('Selected DateTime: $selectedDateTime');
-      }
-    }
   }
 }
