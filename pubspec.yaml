@@ -40,6 +40,7 @@ dependencies:
   get: ^4.6.6
   flex_color_picker: ^3.5.1
   flutter_iconpicker: ^3.4.6
+  syncfusion_flutter_charts: ^26.2.9
 
 dev_dependencies:
   flutter_test:

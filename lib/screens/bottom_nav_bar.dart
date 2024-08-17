@@ -5,14 +5,16 @@ import 'package:uptodo/constants/text_styles.dart';
 import 'package:uptodo/resusable_widgets/category_dialog.dart';
 import 'package:uptodo/resusable_widgets/datetime_picker.dart';
 import 'package:uptodo/resusable_widgets/priority_dialog.dart';
+import 'package:uptodo/screens/calendar.dart';
+import 'package:uptodo/screens/focus_mode.dart';
 import 'package:uptodo/screens/home.dart';
 import 'package:uptodo/utils/helpers/helperFunctions.dart';
 
 class BottomNavBar extends StatelessWidget {
-  BottomNavBar({Key? key}) : super(key: key);
+  BottomNavBar({super.key});
 
   final _controller = PersistentTabController(initialIndex: 0);
-  DateTime? selectedDateTime; // To store the selected date and time
+  DateTime? selectedDateTime;
   String? selectedCategory;
   int? selectedPriority;
 
@@ -25,9 +27,9 @@ class BottomNavBar extends StatelessWidget {
       controller: _controller,
       screens: [
         HomeScreen(empty: empty),
-        Container(color: Colors.blue),
+        const CalendarScreen(),
         HomeScreen(empty: empty),
-        Container(color: Colors.red),
+        const FocusModeScreen(),
         Container(color: Colors.black),
       ],
       items: [

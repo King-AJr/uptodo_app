@@ -8,7 +8,7 @@ class MyElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
       backgroundColor: appPurple,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
       ),
       fixedSize: const Size(150, 48),
     ),

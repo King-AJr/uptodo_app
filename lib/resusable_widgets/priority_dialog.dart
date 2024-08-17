@@ -43,9 +43,9 @@ class _PriorityDialogState extends State<PriorityDialog> {
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
-            childAspectRatio: 1,
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 8,
+            childAspectRatio: 0.8,
           ),
           itemCount: 10,
           itemBuilder: (context, index) {
@@ -98,8 +98,6 @@ class _PriorityDialogState extends State<PriorityDialog> {
       },
       child: Container(
         padding: const EdgeInsets.all(7),
-        width: 70,
-        height: 70,
         decoration: BoxDecoration(
           color: isSelected ? appPurple : const Color(0xff272727),
           borderRadius: const BorderRadius.all(

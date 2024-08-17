@@ -22,6 +22,7 @@ class DateTimePicker extends StatelessWidget {
           TimeOfDay? selectedTime = await showTimePicker(
             context: context,
             initialTime: TimeOfDay.now(),
+            // initialEntryMode: TimePickerEntryMode.input);
           );
 
           if (selectedTime != null) {

@@ -11,7 +11,7 @@ class MyOutlineButtonTheme {
         width: 1,
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
       ),
       fixedSize: const Size(150, 48),
       textStyle: const TextStyle(

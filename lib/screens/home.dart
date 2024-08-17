@@ -99,8 +99,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 7.5),
                       // Use the tasks from DummyData
-                      ...DummyData.tasks.map((task) => TaskCard(
-                      task: task)),
+                      ...DummyData.tasks.map((task) => TaskCard(task: task)),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -132,13 +131,12 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 7.5),
-                      // Example of a completed task
+
                       TaskCard(
                         task: Task(
-                            title: 'Business meeting with the CEO',
-                            time: '08:15',
-                            // Placeholder priority
-                          ),
+                          title: 'Business meeting with the CEO',
+                          time: '08:15',
+                        ),
                       ),
                     ],
                   )

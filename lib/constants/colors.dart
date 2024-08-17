@@ -39,3 +39,7 @@ const Color bottomNavBar = Color(0xff363636);
 const Color workColor = Color(0xffFF9680);
 
 const Color buttonGrey = Color(0xff1D1D1D);
+
+const Color dayColor = Color(0xff272727);
+
+const Color barColor = Color(0xffA5A5A5);

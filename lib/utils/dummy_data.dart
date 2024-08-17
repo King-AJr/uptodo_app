@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:uptodo/constants/colors.dart';
 import 'package:uptodo/models/categories_models.dart';
+import 'package:uptodo/models/focus_model.dart';
 import 'package:uptodo/models/task_model.dart';
 
 class DummyData {
@@ -74,5 +75,15 @@ class DummyData {
       priority: 3,
       description: 'Discuss Q3 performance and strategies',
     ),
+  ];
+
+  static List<FocusMode> focusData = [
+    FocusMode('SUN', 2.5),
+    FocusMode('MON', 3.5),
+    FocusMode('TUE', 5.0),
+    FocusMode('WED', 3.0),
+    FocusMode('THU', 4.0),
+    FocusMode('FRI', 4.5),
+    FocusMode('SAT', 2.0),
   ];
 }

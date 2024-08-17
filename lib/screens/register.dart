@@ -6,8 +6,11 @@ import 'package:uptodo/resusable_widgets/custom_textfield.dart';
 import 'package:uptodo/screens/bottom_nav_bar.dart';
 import 'package:uptodo/screens/login.dart';
 
+
+
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
