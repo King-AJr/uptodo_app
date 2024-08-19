@@ -43,3 +43,5 @@ const Color buttonGrey = Color(0xff1D1D1D);
 const Color dayColor = Color(0xff272727);
 
 const Color barColor = Color(0xffA5A5A5);
+
+const Color focusAppCard = Color(0xff4C4C4C);

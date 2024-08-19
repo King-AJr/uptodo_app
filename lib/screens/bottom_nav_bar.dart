@@ -8,6 +8,7 @@ import 'package:uptodo/resusable_widgets/priority_dialog.dart';
 import 'package:uptodo/screens/calendar.dart';
 import 'package:uptodo/screens/focus_mode.dart';
 import 'package:uptodo/screens/home.dart';
+import 'package:uptodo/screens/profile.dart';
 import 'package:uptodo/utils/helpers/helperFunctions.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -30,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
         const CalendarScreen(),
         HomeScreen(empty: empty),
         const FocusModeScreen(),
-        Container(color: Colors.black),
+        const ProfileScreen()
       ],
       items: [
         PersistentBottomNavBarItem(
