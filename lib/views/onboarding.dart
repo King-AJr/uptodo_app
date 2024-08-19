@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/onboarding_button.dart';
-import 'package:uptodo/screens/start_screen.dart';
+import 'package:uptodo/views/start_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});

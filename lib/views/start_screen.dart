@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
-import 'package:uptodo/screens/login.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
+import 'package:uptodo/views/login.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});

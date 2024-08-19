@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
-import 'package:uptodo/screens/onboarding.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
+import 'package:uptodo/views/onboarding.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});

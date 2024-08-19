@@ -1,10 +1,10 @@
 // category_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/categories_models.dart';
-import 'package:uptodo/screens/add_category.dart';
+import 'package:uptodo/views/add_category.dart';
 import 'package:uptodo/utils/dummy_data.dart';
 
 class CategoryDialog extends StatelessWidget {

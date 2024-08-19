@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/screens/bottom_nav_bar.dart';
-import 'package:uptodo/screens/intro.dart';
-import 'package:uptodo/screens/onboarding.dart';
+import 'package:uptodo/views/bottom_nav_bar.dart';
+import 'package:uptodo/views/intro.dart';
+import 'package:uptodo/views/onboarding.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/themes/themes.dart';
+import 'package:uptodo/utils/themes/themes.dart';
 
 void main() {
   runApp(const MyApp());

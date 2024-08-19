@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/sizes.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/sizes.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/account_name_dialog.dart';
 import 'package:uptodo/resusable_widgets/change_image_modal.dart';
 import 'package:uptodo/resusable_widgets/change_password_dialog.dart';
 import 'package:uptodo/resusable_widgets/settings_row.dart';
-import 'package:uptodo/screens/settings.dart';
+import 'package:uptodo/views/settings.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

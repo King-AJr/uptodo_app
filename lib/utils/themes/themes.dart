@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/themes/elevated_button_themes.dart';
-import 'package:uptodo/themes/outline_button_themes.dart';
-import 'package:uptodo/themes/textformfield_theme.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/themes/elevated_button_themes.dart';
+import 'package:uptodo/utils/themes/outline_button_themes.dart';
+import 'package:uptodo/utils/themes/textformfield_theme.dart';
 
 class myAppTheme {
   myAppTheme._();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:uptodo/utils/helpers/helperFunctions.dart';
+import 'package:uptodo/utils/helperFunctions.dart';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({super.key});
@@ -33,7 +33,6 @@ class _AddCategoryState extends State<AddCategory> {
     controller.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,23 +116,26 @@ class _AddCategoryState extends State<AddCategory> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      content: ColorPicker(
-                        color: selectedColor,
-                        onColorChanged: (Color color) {
-                          setState(() {
-                            selectedColor = color;
-                          });
-                        },
-                        width: 40,
-                        height: 40,
-                        borderRadius: 22,
-                        heading: Text(
-                          'Select color',
-                          style: s16RegWhite87.copyWith(fontSize: 12),
-                        ),
-                        subheading: Text(
-                          'Select color shade',
-                          style: s16RegWhite87.copyWith(fontSize: 12),
+                      content: SizedBox(
+                        height: 400,
+                        child: ColorPicker(
+                          color: selectedColor,
+                          onColorChanged: (Color color) {
+                            setState(() {
+                              selectedColor = color;
+                            });
+                          },
+                          width: 40,
+                          height: 40,
+                          borderRadius: 22,
+                          heading: Text(
+                            'Select color',
+                            style: s16RegWhite87.copyWith(fontSize: 12),
+                          ),
+                          subheading: Text(
+                            'Select color shade',
+                            style: s16RegWhite87.copyWith(fontSize: 12),
+                          ),
                         ),
                       ),
                       actions: [
@@ -218,7 +220,9 @@ class _AddCategoryState extends State<AddCategory> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: Text(
                 'Cancel',
                 style: s16RegWhite40.copyWith(color: appPurple),

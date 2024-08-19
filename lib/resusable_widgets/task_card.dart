@@ -1,10 +1,10 @@
 // task_card.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/task_model.dart';
-import 'package:uptodo/screens/tasks.dart';
+import 'package:uptodo/views/tasks.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;
@@ -58,7 +58,7 @@ class TaskCard extends StatelessWidget {
                           style: s18RegGrey.copyWith(fontSize: 14),
                         ),
                         if (task.taskCategory != null &&
-                            task.taskCategory!.isNotEmpty)
+                            task.taskCategory != null)
                           Row(
                             children: [
                               Container(
@@ -74,10 +74,11 @@ class TaskCard extends StatelessWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      if (task.tagIcon != null) task.tagIcon!,
-                                      if (task.tagIcon != null)
+                                      if (task.taskCategory!.icon != null)
+                                        task.taskCategory!.icon,
+                                      if (task.taskCategory!.icon != null)
                                         const SizedBox(width: 5),
-                                      Text(task.taskCategory!,
+                                      Text(task.taskCategory!.name,
                                           style: s12RegWhite),
                                     ],
                                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/sizes.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/sizes.dart';
+import 'package:uptodo/utils/text_styles.dart';
 
 class PriorityDialog extends StatefulWidget {
   final Function(int) onPrioritySelected;

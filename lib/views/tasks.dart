@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/sizes.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/sizes.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/resusable_widgets/category_dialog.dart';
 import 'package:uptodo/resusable_widgets/deletetask_dialog.dart';
 import 'package:uptodo/resusable_widgets/priority_dialog.dart';
-import 'package:uptodo/screens/bottom_nav_bar.dart';
-import 'package:uptodo/utils/helpers/helperFunctions.dart';
+import 'package:uptodo/views/bottom_nav_bar.dart';
+import 'package:uptodo/utils/helperFunctions.dart';
 
 class TaskScreen extends StatelessWidget {
   final Task task;
@@ -52,8 +52,8 @@ class TaskScreen extends StatelessWidget {
               _buildInfoRow(
                 icon: Icons.sell_outlined,
                 label: 'Task Category:',
-                content: task.taskCategory ?? '',
-                leadingWidget: task.tagIcon,
+                content: task.taskCategory!.name ?? '',
+                leadingWidget: task.taskCategory!.icon,
               ),
               const SizedBox(height: 30),
               _buildInfoRow(

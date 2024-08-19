@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/resusable_widgets/horizontal_datepicker.dart';
 import 'package:uptodo/resusable_widgets/task_card.dart';

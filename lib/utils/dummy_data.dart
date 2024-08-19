@@ -1,6 +1,6 @@
 // dummy_data.dart
 import 'package:flutter/material.dart';
-import 'package:uptodo/constants/colors.dart';
+import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/models/categories_models.dart';
 import 'package:uptodo/models/focus_model.dart';
 import 'package:uptodo/models/task_model.dart';
@@ -11,6 +11,11 @@ class DummyData {
       name: 'Grocery',
       color: const Color(0xffCCFF80),
       icon: const Icon(Icons.lunch_dining_outlined, color: Color(0xff21A300)),
+    ),
+    Category(
+      name: 'Home',
+      color: appRed,
+      icon: const Icon(Icons.add, color: Color(0xffA30000)),
     ),
     Category(
       name: 'Work',
@@ -48,33 +53,41 @@ class DummyData {
 
   static List<Task> tasks = [
     Task(
-      title: 'Do Math Homework',
-      time: '16:45',
-      tagColor: tagPurple,
-      taskCategory: 'University',
-      tagIcon: const Icon(Icons.school_outlined, color: Color(0xff0055A3)),
-      priority: 1,
-      description: 'Complete chapter 5 exercises',
-    ),
+        title: 'Do Math Homework',
+        time: '16:45',
+        tagColor: tagPurple,
+        taskCategory: Category(
+          name: 'University',
+          color: appPurple,
+          icon: const Icon(
+            Icons.school_outlined,
+            color: Color(0xff0055A3),
+          ),
+        ),
+        priority: 3),
     Task(
-      title: 'Take out Dogs',
-      time: '18:20',
-      tagColor: appOrange,
-      taskCategory: 'Home',
-      tagIcon: const Icon(Icons.home_outlined, color: Color(0xffA30000)),
-      priority: 2,
-      description: 'Walk the dogs for 30 minutes',
-    ),
+        title: 'Take out Dogs',
+        time: '18:20',
+        tagColor: appOrange,
+        taskCategory: Category(
+          name: 'Home',
+          color: appRed,
+          icon: const Icon(Icons.add, color: Color(0xffA30000)),
+        ),
+        priority: 1),
     Task(
-      title: 'Business meeting with the CEO',
-      time: '08:15',
-      tagColor: appYellow,
-      taskCategory: 'Work',
-      tagIcon:
-          const Icon(Icons.business_center_outlined, color: Color(0xffA36200)),
-      priority: 3,
-      description: 'Discuss Q3 performance and strategies',
-    ),
+        title: 'Business meeting with the CEO',
+        time: '08:15',
+        tagColor: appYellow,
+        taskCategory: Category(
+          name: 'Work',
+          color: appOrange,
+          icon: const Icon(
+            Icons.business_center_outlined,
+            color: Color(0xffA36200),
+          ),
+        ),
+        priority: 2),
   ];
 
   static List<FocusMode> focusData = [

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/constants/colors.dart';
+import 'package:uptodo/utils/colors.dart';
 
 class MyOutlineButtonTheme {
   MyOutlineButtonTheme._();

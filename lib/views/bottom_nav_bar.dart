@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:uptodo/constants/colors.dart';
-import 'package:uptodo/constants/text_styles.dart';
+import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/category_dialog.dart';
 import 'package:uptodo/resusable_widgets/datetime_picker.dart';
 import 'package:uptodo/resusable_widgets/priority_dialog.dart';
-import 'package:uptodo/screens/calendar.dart';
-import 'package:uptodo/screens/focus_mode.dart';
-import 'package:uptodo/screens/home.dart';
-import 'package:uptodo/screens/profile.dart';
-import 'package:uptodo/utils/helpers/helperFunctions.dart';
+import 'package:uptodo/views/calendar.dart';
+import 'package:uptodo/views/focus_mode.dart';
+import 'package:uptodo/views/home.dart';
+import 'package:uptodo/views/profile.dart';
+import 'package:uptodo/utils/helperFunctions.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
@@ -124,13 +124,26 @@ class BottomNavBar extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              TextFormField(),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Task title',
+                  hintStyle: s16RegWhite40.copyWith(color: hintColor),
+                ),
+                style: s16RegWhite40.copyWith(color: appWhite),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text("Description", style: s18RegGrey),
                 ],
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Task description',
+                  hintStyle: s16RegWhite40.copyWith(color: hintColor),
+                ),
+                style: s16RegWhite40.copyWith(color: appWhite),
               ),
               const SizedBox(
                 height: 30,
@@ -158,6 +171,7 @@ class BottomNavBar extends StatelessWidget {
                             builder: (context) => CategoryDialog(
                               onCategorySelected: (category) {
                                 selectedCategory = category;
+                                print(selectedCategory);
                               },
                             ),
                           );
