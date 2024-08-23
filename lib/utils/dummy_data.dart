@@ -55,10 +55,9 @@ class DummyData {
     Task(
         title: 'Do Math Homework',
         time: '16:45',
-        tagColor: tagPurple,
         taskCategory: Category(
           name: 'University',
-          color: appPurple,
+          color: tagPurple,
           icon: const Icon(
             Icons.school_outlined,
             color: Color(0xff0055A3),
@@ -68,25 +67,25 @@ class DummyData {
     Task(
         title: 'Take out Dogs',
         time: '18:20',
-        tagColor: appOrange,
         taskCategory: Category(
           name: 'Home',
-          color: appRed,
-          icon: const Icon(Icons.add, color: Color(0xffA30000)),
+          color: appOrange,
+          icon: const Icon(Icons.home, color: Color(0xffA30000)),
         ),
-        priority: 1),
+        priority: 1,
+        description: 'take the dogs to the park'),
     Task(
         title: 'Business meeting with the CEO',
         time: '08:15',
-        tagColor: appYellow,
         taskCategory: Category(
           name: 'Work',
-          color: appOrange,
+          color: appYellow,
           icon: const Icon(
             Icons.business_center_outlined,
             color: Color(0xffA36200),
           ),
         ),
+        description: 'meeting concerning the new project',
         priority: 2),
   ];
 

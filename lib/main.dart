@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uptodo/utils/getit.dart';
+import 'package:uptodo/view-models/auth_vm.dart';
 import 'package:uptodo/views/bottom_nav_bar.dart';
 import 'package:uptodo/views/intro.dart';
 import 'package:uptodo/views/onboarding.dart';
 import 'package:get/get.dart';
 import 'package:uptodo/utils/themes/themes.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await setup();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthVm()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

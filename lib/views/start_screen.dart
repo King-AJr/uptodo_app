@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/views/login.dart';
+import 'package:uptodo/views/register.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -50,7 +51,9 @@ class StartScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 48,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => const RegisterScreen());
+                    },
                     child: Text('CREATE ACCOUNT',
                         style: s16RegWhite40.copyWith(color: appWhite)),
                   ),

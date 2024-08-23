@@ -3,7 +3,6 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/category_dialog.dart';
-import 'package:uptodo/resusable_widgets/datetime_picker.dart';
 import 'package:uptodo/resusable_widgets/priority_dialog.dart';
 import 'package:uptodo/views/calendar.dart';
 import 'package:uptodo/views/focus_mode.dart';

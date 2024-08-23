@@ -3,17 +3,25 @@ import 'package:get/get.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
+import 'package:uptodo/utils/validators.dart';
+import 'package:uptodo/view-models/auth_vm.dart';
 import 'package:uptodo/views/bottom_nav_bar.dart';
 import 'package:uptodo/views/login.dart';
+import 'package:provider/provider.dart';
 
-
-
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<AuthVm>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -34,22 +42,29 @@ class RegisterScreen extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Form(
+            key: formKey,
             child: Column(
               children: [
                 CustomTextField(
-                  label: "Username",
-                  hintText: "Enter your username",
-                  isPassword: false,
-                ),
+                    controller: vm.name,
+                    label: "Username",
+                    hintText: "Enter your username",
+                    isPassword: false,
+                    validator: (value) => validateUsername(value)),
                 CustomTextField(
-                  label: "Password",
-                  hintText: "********",
-                  isPassword: true,
-                ),
+                    controller: vm.password,
+                    label: "Password",
+                    hintText: "********",
+                    isPassword: true,
+                    validator: (value) => validatePassword(value)),
                 CustomTextField(
+                  controller: vm.cpassword,
                   label: "Confirm Password",
                   hintText: "********",
                   isPassword: true,
+                  validator: (value) {
+                    return confirmPassword(vm.password.text, value ?? '');
+                  },
                 ),
                 const SizedBox(
                   height: 25,
@@ -58,7 +73,10 @@ class RegisterScreen extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.offAll(() => BottomNavBar());
+                      if (!formKey.currentState!.validate()) {
+                        return;
+                      }
+                      vm.register(context);
                     },
                     child: const Text('Register'),
                   ),

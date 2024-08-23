@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uptodo/utils/colors.dart';
 
 class DateTimePicker extends StatelessWidget {
   final Function(DateTime) onDateTimeSelected;
@@ -20,10 +21,9 @@ class DateTimePicker extends StatelessWidget {
 
         if (selectedDate != null) {
           TimeOfDay? selectedTime = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
-            // initialEntryMode: TimePickerEntryMode.input);
-          );
+              context: context,
+              initialTime: TimeOfDay.now(),
+              initialEntryMode: TimePickerEntryMode.input);
 
           if (selectedTime != null) {
             DateTime finalDateTime = DateTime(

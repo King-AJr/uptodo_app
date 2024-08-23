@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
+import 'package:uptodo/utils/validators.dart';
+import 'package:uptodo/view-models/auth_vm.dart';
 import 'package:uptodo/views/register.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final formKey = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<AuthVm>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -30,20 +40,24 @@ class LoginScreen extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Form(
+            key: formKey,
             child: Column(
               children: [
                 const SizedBox(
                   height: 20,
                 ),
                 CustomTextField(
-                  label: "Username",
-                  hintText: "Enter your username",
-                  isPassword: false,
-                ),
+                    label: "Username",
+                    hintText: "Enter your username",
+                    isPassword: false,
+                    controller: vm.name,
+                    validator: (value) => validateUsername(value)),
                 CustomTextField(
                   label: "Password",
                   hintText: "********",
                   isPassword: true,
+                  controller: vm.password,
+                  validator: (value) => validatePassword(value),
                 ),
                 const SizedBox(
                   height: 50,
@@ -51,7 +65,12 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) {
+                        return;
+                      }
+                      vm.login(context);
+                    },
                     child: const Text('Login'),
                   ),
                 ),
