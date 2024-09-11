@@ -45,5 +45,36 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>GIDClientID</key>
+	<string>371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f.apps.googleusercontent.com</string>
+	<key>ClientID</key>
+	<string>371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.example.uptodo</string>
+        </array>
+    </dict>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.googleusercontent.apps.371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f</string>
+        </array>
+    </dict>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.googleusercontent.apps.371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f</string>
+        </array>
+    </dict>
+</array>
 </dict>
 </plist>
