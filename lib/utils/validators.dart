@@ -1,10 +1,28 @@
 String? validateUsername(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Please enter a username';
+    return 'Please enter a name';
   }
 
   if (value.length < 3 || value.length > 23) {
-    return 'Username must be between 3 and 23 characters';
+    return 'Name must be between 3 and 23 characters';
+  }
+
+  // Updated regex to allow letters and spaces
+  if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+    return 'Name must contain only letters and spaces';
+  }
+
+  return null;
+}
+
+String? validateString(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter a String';
+  }
+
+  // Updated regex to allow letters and spaces
+  if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+    return 'text must contain only letters and spaces';
   }
 
   return null;

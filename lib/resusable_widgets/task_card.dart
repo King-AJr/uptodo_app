@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/helperFunctions.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/views/tasks.dart';
@@ -49,12 +50,12 @@ class TaskCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(task.title, style: s16RegWhite87),
+                    Text(task.title ?? '', style: s16RegWhite87),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Today At ${task.time}",
+                          formatTaskTime(task.time),
                           style: s18RegGrey.copyWith(fontSize: 14),
                         ),
                         if (task.taskCategory != null &&

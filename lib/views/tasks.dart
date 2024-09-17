@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uptodo/models/categories_models.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/sizes.dart';
 import 'package:uptodo/utils/text_styles.dart';
@@ -19,7 +20,7 @@ class TaskScreen extends StatelessWidget {
   });
 
   DateTime? selectedDateTime;
-  String? selectedCategory;
+  Category? selectedCategory;
   int? selectedPriority;
 
   @override
@@ -129,7 +130,7 @@ class TaskScreen extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              task.title,
+              task.title ?? '',
               style: s20BoldWhite87.copyWith(fontFamily: 'latoRegular'),
             ),
           ],
@@ -191,7 +192,7 @@ class TaskScreen extends StatelessWidget {
       onTap: () {
         showDialog(
           context: context,
-          builder: (context) => DeleteTaskDialog(title: task.title),
+          builder: (context) => DeleteTaskDialog(title: task.title ?? ''),
         );
       },
       child: Container(

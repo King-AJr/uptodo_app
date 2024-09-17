@@ -22,7 +22,7 @@ void successAlert(String message, {String? title}) {
   Get.snackbar(
     title ?? 'Awesome',
     message,
-    colorText: appRed,
+    colorText: Colors.white,
     backgroundColor: primaryColor,
     margin: EdgeInsets.all(15),
     snackPosition: SnackPosition.TOP,

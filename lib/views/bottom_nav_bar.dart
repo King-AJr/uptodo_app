@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:uptodo/models/categories_models.dart';
+import 'package:uptodo/resusable_widgets/alerts.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/category_dialog.dart';
 import 'package:uptodo/resusable_widgets/priority_dialog.dart';
+import 'package:uptodo/utils/validators.dart';
+import 'package:uptodo/view-models/task_vm.dart';
 import 'package:uptodo/views/calendar.dart';
 import 'package:uptodo/views/focus_mode.dart';
 import 'package:uptodo/views/home.dart';
@@ -15,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
 
   final _controller = PersistentTabController(initialIndex: 0);
   DateTime? selectedDateTime;
-  String? selectedCategory;
+  Category? selectedCategory;
   int? selectedPriority;
 
   @override
@@ -96,106 +101,137 @@ class BottomNavBar extends StatelessWidget {
   }
 
   void _showAddTaskModal(BuildContext context) {
+    final vm = Provider.of<TaskVm>(context, listen: false);
+    final formKey = GlobalKey<FormState>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: bottomNavBar,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
       ),
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Add Task',
-                    style: s32BoldWhite.copyWith(
-                      fontSize: 20,
-                      color: white87,
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Add Task',
+                      style: s32BoldWhite.copyWith(
+                        fontSize: 20,
+                        color: white87,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Task title',
-                  hintStyle: s16RegWhite40.copyWith(color: hintColor),
+                  ],
                 ),
-                style: s16RegWhite40.copyWith(color: appWhite),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Description", style: s18RegGrey),
-                ],
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Task description',
-                  hintStyle: s16RegWhite40.copyWith(color: hintColor),
-                ),
-                style: s16RegWhite40.copyWith(color: appWhite),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.timer_outlined, size: 24),
-                        onPressed: () async {
-                          selectedDateTime = await pickDateTime(context);
-                          if (selectedDateTime != null) {
-                            print('Selected DateTime: $selectedDateTime');
-                          }
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        icon: const Icon(Icons.sell_outlined, size: 24),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => CategoryDialog(
-                              onCategorySelected: (category) {
-                                selectedCategory = category;
-                                print(selectedCategory);
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        icon: const Icon(Icons.tour_outlined, size: 24),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PriorityDialog(
-                              onPrioritySelected: (priority) {
-                                selectedPriority = priority;
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: vm.title,
+                  validator: (value) => validateString(value),
+                  decoration: InputDecoration(
+                    hintText: 'Task title',
+                    hintStyle: s16RegWhite40.copyWith(color: hintColor),
                   ),
-                  const Icon(Icons.send_outlined, size: 24),
-                ],
-              ),
-            ],
+                  style: s16RegWhite40.copyWith(color: appWhite),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("Description", style: s18RegGrey),
+                  ],
+                ),
+                TextFormField(
+                  controller: vm.description,
+                  validator: (value) => validateString(value),
+                  decoration: InputDecoration(
+                    hintText: 'Task description',
+                    hintStyle: s16RegWhite40.copyWith(color: hintColor),
+                  ),
+                  style: s16RegWhite40.copyWith(color: appWhite),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.timer_outlined, size: 24),
+                          onPressed: () async {
+                            selectedDateTime = await pickDateTime(context);
+                            if (selectedDateTime != null) {
+                              vm.selectedDateTime = selectedDateTime;
+                              print('Selected DateTime: $selectedDateTime');
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.sell_outlined, size: 24),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CategoryDialog(
+                                onCategorySelected: (category) {
+                                  selectedCategory = category;
+                                  vm.selectedCategory = selectedCategory;
+                                  print(vm.selectedCategory);
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.tour_outlined, size: 24),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PriorityDialog(
+                                onPrioritySelected: (priority) {
+                                  selectedPriority = priority;
+                                  vm.selectedPriority = priority;
+                                  print(vm.selectedPriority);
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
+                        if (vm.selectedCategory == null ||
+                            vm.selectedDateTime == null ||
+                            vm.selectedPriority == null) {
+                          errorAlert(
+                            'Task time, date, category and priority must be selected',
+                          );
+                          return;
+                        }
+                        vm.addTask(context);
+                      },
+                      icon: const Icon(Icons.send_outlined, size: 24),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

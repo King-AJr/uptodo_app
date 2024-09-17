@@ -52,9 +52,10 @@ class DummyData {
   ];
 
   static List<Task> tasks = [
-    Task(
+    Task(null,
         title: 'Do Math Homework',
         time: '16:45',
+        description: '',
         taskCategory: Category(
           name: 'University',
           color: tagPurple,
@@ -64,7 +65,7 @@ class DummyData {
           ),
         ),
         priority: 3),
-    Task(
+    Task(null,
         title: 'Take out Dogs',
         time: '18:20',
         taskCategory: Category(
@@ -74,7 +75,7 @@ class DummyData {
         ),
         priority: 1,
         description: 'take the dogs to the park'),
-    Task(
+    Task(null,
         title: 'Business meeting with the CEO',
         time: '08:15',
         taskCategory: Category(

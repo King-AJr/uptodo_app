@@ -1,10 +1,12 @@
-// home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uptodo/resusable_widgets/empty_list.dart';
 import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/helperFunctions.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/resusable_widgets/task_card.dart';
-import 'package:uptodo/utils/dummy_data.dart';
+import 'package:uptodo/view-models/task_vm.dart';
 
 class HomeScreen extends StatelessWidget {
   final bool empty;
@@ -12,47 +14,44 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<TaskVm>(context);
     return Scaffold(
       body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(Icons.filter_list),
-                Text(
-                  "Index",
-                  style: s16RegWhite87.copyWith(fontSize: 20),
-                ),
-                const CircleAvatar(
-                  radius: 25,
-                  child: Image(
-                    image: AssetImage('assets/images/profile_pic.png'),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Icon(Icons.filter_list),
+                  Text(
+                    "Index",
+                    style: s16RegWhite87.copyWith(fontSize: 20),
                   ),
-                ),
-              ],
-            ),
-            empty
-                ? Column(
+                  const CircleAvatar(
+                    radius: 25,
+                    child: Image(
+                      image: AssetImage('assets/images/profile_pic.png'),
+                    ),
+                  ),
+                ],
+              ),
+              FutureBuilder(
+                future: vm.getTask(context,
+                    filter: {'today': true, 'completed': false}),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Loader();
+                  }
+                  TasksResponse res = snapshot.data;
+                  if (res.tasks!.isEmpty || res.tasks![0].id == null) {
+                    return const EmptyList();
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 50),
-                      const Image(
-                        image: AssetImage('assets/images/home_checklist.png'),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'What do you want to do Today?',
-                        style: s16RegWhite87.copyWith(fontSize: 20),
-                      ),
-                      const SizedBox(height: 15),
-                      Text('Tap + to add tasks', style: s16RegWhite87),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      const SizedBox(height: 20),
                       SizedBox(
                         height: 48,
                         child: TextField(
@@ -68,81 +67,100 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 31,
-                            padding: const EdgeInsets.all(7),
-                            decoration: const BoxDecoration(
-                              color: white21,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
+                      Container(
+                        height: 37,
+                        width: 76,
+                        decoration: BoxDecoration(
+                          color: white21,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Today',
+                              style: s16RegWhite87.copyWith(fontSize: 12),
                             ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Today",
-                                    style: s16RegWhite87.copyWith(fontSize: 12),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Icon(Icons.arrow_drop_down_outlined,
-                                      color: white87, size: 16),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 7.5),
-                      // Use the tasks from DummyData
-                      ...DummyData.tasks.map((task) => TaskCard(task: task)),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 31,
-                            padding: const EdgeInsets.all(7),
-                            decoration: const BoxDecoration(
-                              color: white21,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Completed",
-                                    style: s16RegWhite87.copyWith(fontSize: 12),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Icon(Icons.arrow_drop_down_outlined,
-                                      color: white87, size: 16),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 7.5),
-
-                      TaskCard(
-                        task: Task(
-                          title: 'Business meeting with the CEO',
-                          time: '08:15',
+                            const SizedBox(width: 5),
+                            const Icon(
+                              Icons.expand_more_outlined,
+                              color: white87,
+                            )
+                          ],
                         ),
                       ),
+                      const SizedBox(height: 20),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemCount: res.tasks?.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Task task = res.tasks![index];
+                          return TaskCard(task: task);
+                        },
+                      ),
                     ],
-                  )
-          ],
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: vm.getTask(context, filter: {'completed': true}),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Loader();
+                  }
+                  TasksResponse res = snapshot.data;
+                  if (res.tasks!.isEmpty || res.tasks![0].id == null) {
+                    return const SizedBox();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 31,
+                        width: 100,
+                        padding: const EdgeInsets.all(7),
+                        decoration: const BoxDecoration(
+                          color: white21,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Completed",
+                              style: s16RegWhite87.copyWith(fontSize: 12),
+                            ),
+                            const SizedBox(width: 5),
+                            const Icon(
+                              Icons.expand_more_outlined,
+                              color: white87,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemCount: res.tasks?.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Task task = res.tasks![index];
+                          return TaskCard(task: task);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              )
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

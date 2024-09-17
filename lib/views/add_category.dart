@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:provider/provider.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:uptodo/utils/helperFunctions.dart';
+import 'package:uptodo/view-models/category_vm.dart';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({super.key});
@@ -22,7 +24,6 @@ class _AddCategoryState extends State<AddCategory> {
   void initState() {
     super.initState();
 
-    // Add listener to update the UI whenever the text changes
     controller.addListener(() {
       setState(() {});
     });
@@ -36,6 +37,7 @@ class _AddCategoryState extends State<AddCategory> {
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<CategoryVm>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -47,9 +49,10 @@ class _AddCategoryState extends State<AddCategory> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
-                hintText: 'Category name',
-                label: 'Category name',
-                controller: controller),
+              hintText: 'Category name',
+              label: 'Category name',
+              controller: vm.name,
+            ),
             const SizedBox(height: 20),
             Row(
               children: [
@@ -159,6 +162,7 @@ class _AddCategoryState extends State<AddCategory> {
                 if (pickedColor != null) {
                   setState(() {
                     selectedColor = pickedColor;
+                    vm.color = selectedColor;
                   });
                 }
               },
@@ -206,7 +210,7 @@ class _AddCategoryState extends State<AddCategory> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(controller.text.trim(), style: s14MedWhite87)
+                    Text(vm.name.text, style: s14MedWhite87)
                   ],
                 ),
               ],
@@ -229,7 +233,11 @@ class _AddCategoryState extends State<AddCategory> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                vm.iconColor = getDarkerShade(selectedColor);
+                vm.icon = selectedIcon;
+                vm.addCategory(context);
+              },
               child: Text(
                 'Create category',
                 style: s16RegWhite40.copyWith(color: appWhite),

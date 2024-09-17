@@ -1,19 +1,23 @@
 // category_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/helperFunctions.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/categories_models.dart';
+import 'package:uptodo/view-models/category_vm.dart';
 import 'package:uptodo/views/add_category.dart';
 import 'package:uptodo/utils/dummy_data.dart';
 
 class CategoryDialog extends StatelessWidget {
-  final Function(String) onCategorySelected;
+  final Function(Category) onCategorySelected;
 
   const CategoryDialog({super.key, required this.onCategorySelected});
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<CategoryVm>(context);
     return AlertDialog(
       backgroundColor: bottomNavBar,
       shape: RoundedRectangleBorder(
@@ -36,22 +40,41 @@ class CategoryDialog extends StatelessWidget {
       ),
       content: SizedBox(
         width: double.maxFinite,
-        child: GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
-            childAspectRatio: 1,
-          ),
-          itemCount: DummyData.categories.length,
-          itemBuilder: (context, index) {
-            final category = DummyData.categories[index];
+        child: FutureBuilder(
+            future: vm.getCategories(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (vm.categories == null) {
+                return const Loader();
+              }
+              CategoryResponse res = vm.categories!;
+              List<Category> categories = res.categories!;
+              res.categories!.add(
+                Category(
+                  color: const Color(0xff80ffd1),
+                  name: 'Create New',
+                  icon: const Icon(
+                    Icons.add,
+                    color: Color(0xff00a369),
+                  ),
+                ),
+              );
+              return GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                  childAspectRatio: 1,
+                ),
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
 
-            return _buildCategoryButton(context, category);
-          },
-        ),
+                  return _buildCategoryButton(context, category);
+                },
+              );
+            }),
       ),
       actions: <Widget>[
         SizedBox(
@@ -73,7 +96,7 @@ class CategoryDialog extends StatelessWidget {
         if (category.name == 'Create New') {
           Get.to(() => const AddCategory());
         } else {
-          onCategorySelected(category.name);
+          onCategorySelected(category);
           Navigator.of(context).pop();
         }
       },

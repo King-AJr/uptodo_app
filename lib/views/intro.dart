@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/getit.dart';
+import 'package:uptodo/utils/storage.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/views/onboarding.dart';
+import 'package:uptodo/views/redirect.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -20,7 +23,13 @@ class _IntroScreenState extends State<IntroScreen> {
 
   void onBoard() async {
     await Future.delayed(const Duration(seconds: 3), () {
+      
+    final token = getIt.get<LocalStorageService>().getString("token");
+    if (token == null || token == '') {
       Get.offAll(() => const OnboardingScreen());
+      return;
+    }
+    Get.offAll(() => const Redirect());
     });
   }
 

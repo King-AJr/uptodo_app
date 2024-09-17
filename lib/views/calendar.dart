@@ -14,7 +14,7 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  bool isTodaySelected = true; // Track which button is selected
+  bool isTodaySelected = true;
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +117,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   else
                     TaskCard(
                       task: Task(
+                         null,
                         title: 'Business meeting with the CEO',
                         time: '08:15',
                       ),
