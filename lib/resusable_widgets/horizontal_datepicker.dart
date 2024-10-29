@@ -14,28 +14,52 @@ class HorizontalDatePicker extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _HorizontalDatePickerState createState() => _HorizontalDatePickerState();
 }
 
 class _HorizontalDatePickerState extends State<HorizontalDatePicker> {
   late DateTime selectedDate;
   late List<DateTime> days;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     selectedDate = widget.initialDate;
+
+    _scrollController = ScrollController();
+
     _updateDays();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToInitialDate();
+    });
   }
 
   void _updateDays() {
-    final firstDayOfMonth = DateTime(selectedDate.year, selectedDate.month, 1);
     final lastDayOfMonth =
         DateTime(selectedDate.year, selectedDate.month + 1, 0);
     days = List.generate(
       lastDayOfMonth.day,
       (index) => DateTime(selectedDate.year, selectedDate.month, index + 1),
     );
+  }
+
+  void _scrollToInitialDate() {
+    int initialIndex = days.indexWhere((date) =>
+        date.day == selectedDate.day &&
+        date.month == selectedDate.month &&
+        date.year == selectedDate.year);
+
+    if (initialIndex != -1) {
+      double targetScrollOffset = initialIndex * 60.0;
+      _scrollController.animateTo(
+        targetScrollOffset,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _previousMonth() {
@@ -62,10 +86,16 @@ class _HorizontalDatePickerState extends State<HorizontalDatePicker> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose(); // Always dispose the ScrollController
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: bottomNavBar,
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
           Row(
@@ -107,6 +137,7 @@ class _HorizontalDatePickerState extends State<HorizontalDatePicker> {
           SizedBox(
             height: 60,
             child: ListView.builder(
+              controller: _scrollController, // Assign ScrollController here
               scrollDirection: Axis.horizontal,
               itemCount: days.length,
               itemBuilder: (context, index) {

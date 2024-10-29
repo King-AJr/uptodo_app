@@ -9,8 +9,8 @@ import 'package:uptodo/utils/storage.dart';
 import 'package:uptodo/views/login.dart';
 import 'package:http/http.dart' as http;
 
-
-const baseUrl = "http://127.0.0.1:8000";
+const baseUrl = "http://10.0.2.2:8000";
+// android emulator base url http://10.0.2.2:8000
 const _url = '$baseUrl/api';
 
 class Server {

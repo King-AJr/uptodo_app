@@ -1,14 +1,17 @@
 // category_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/view-models/task_vm.dart';
 
-class DeleteTaskDialog extends StatelessWidget {
-  final String title;
-  final int? id;
-  const DeleteTaskDialog({super.key, required this.title, this.id});
+class UpdateTaskDialog extends StatelessWidget {
+  final Task task;
+  const UpdateTaskDialog({
+    super.key,
+    required this.task,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class DeleteTaskDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Delete task',
+                'Complete Task',
                 style: s16RegWhite87.copyWith(fontFamily: 'latoBold'),
               ),
             ],
@@ -35,7 +38,7 @@ class DeleteTaskDialog extends StatelessWidget {
       ),
       content: Container(
         width: double.infinity,
-        height: 85,
+        height: 120,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: const BoxDecoration(
           color: bottomNavBar,
@@ -47,7 +50,9 @@ class DeleteTaskDialog extends StatelessWidget {
           children: [
             Text(
               textAlign: TextAlign.center,
-              'Are you sure you want to delete this task?\ntask title: $title',
+              task.completed == false
+                  ? 'Are you sure you have completed this task?\ntask title: ${task.title}'
+                  : 'Are you sure you want to uncheck this task?\ntask title: ${task.title}',
               style: s16RegWhite87.copyWith(
                 fontFamily: 'latoMedium',
                 fontSize: 18,
@@ -74,10 +79,12 @@ class DeleteTaskDialog extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                vm.deleteTask(id);
+                task.completed = (task.completed ?? false) ? false : true;
+                print(task.completed);
+                vm.updateTask(task);
               },
               child: Text(
-                'Delete',
+                task.completed == true ? 'Uncheck' : 'Check',
                 style: s16RegWhite40.copyWith(color: appWhite),
               ),
             )

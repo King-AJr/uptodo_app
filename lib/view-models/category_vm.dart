@@ -20,7 +20,7 @@ class CategoryVm extends ChangeNotifier {
 
   Future getCategories() async {
     try {
-      final response = await Server().req('/categories');
+      final response = await Server().req('/all_categories');
       final parsed = json.decode(response.body);
       categories = CategoryResponse.fromJson(parsed);
     } catch (e) {
@@ -39,7 +39,7 @@ class CategoryVm extends ChangeNotifier {
         icon: Icon(icon, color: iconColor),
       ).toJson();
 
-      final response = await Server().req('/categories',
+      final response = await Server().req('/add_categories',
           type: 'post', data: {...categoryData, 'user_id': userId});
 
       final Map<String, dynamic> body = json.decode(response.body);

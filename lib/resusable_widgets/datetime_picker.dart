@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/utils/colors.dart';
 
 class DateTimePicker extends StatelessWidget {
   final Function(DateTime) onDateTimeSelected;
   final DateTime? initialDateTime;
 
-  DateTimePicker({required this.onDateTimeSelected, this.initialDateTime});
+  const DateTimePicker({super.key, required this.onDateTimeSelected, this.initialDateTime});
 
   @override
   Widget build(BuildContext context) {

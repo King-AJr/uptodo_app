@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_dnd/flutter_dnd.dart';
+import 'package:provider/provider.dart';
+import 'package:uptodo/resusable_widgets/ios_dnd_dialog.dart';
 import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/focus_service.dart';
 import 'package:uptodo/utils/text_styles.dart';
-import 'package:uptodo/models/focus_model.dart';
-import 'package:uptodo/resusable_widgets/focus_app_card.dart';
-import 'package:uptodo/utils/dummy_data.dart';
+import 'package:uptodo/view-models/focus_vm.dart';
+import 'package:uptodo/views/focus_overview.dart';
 
 class FocusModeScreen extends StatefulWidget {
   const FocusModeScreen({super.key});
@@ -15,51 +19,128 @@ class FocusModeScreen extends StatefulWidget {
 }
 
 class _FocusModeScreenState extends State<FocusModeScreen> {
-  int selectedIndex = -1;
-  bool isFocusing = false;
-  Timer? _timer;
-  int _seconds = 0;
-
-  String get _formattedTime {
-    int minutes = _seconds ~/ 60;
-    int seconds = _seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = Provider.of<FocusModeVm>(context, listen: false);
+      vm.fetchFocusData(context, 'thisWeek');
+    });
   }
 
-  void _startOrStopFocus() {
+  bool isFocusing = false;
+  Duration focusDuration = Duration.zero;
+  Timer? timer;
+  DateTime? startTime;
+
+  // Getter for formatted time
+  String get _formattedTime {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(focusDuration.inHours);
+    final minutes = twoDigits(focusDuration.inMinutes.remainder(60));
+    final seconds = twoDigits(focusDuration.inSeconds.remainder(60));
+    return "$hours:$minutes:$seconds";
+  }
+
+  // Start/stop focus mode logic
+  void _startOrStopFocus() async {
+    final focusModeVm = Provider.of<FocusModeVm>(context, listen: false);
     if (isFocusing) {
-      _stopFocus();
+      // Stop focus mode
+      setState(() {
+        isFocusing = false;
+        timer?.cancel();
+        final endTime = DateTime.now();
+
+        focusModeVm.sendFocusData(context, startTime!, endTime);
+      });
+
+      if (Platform.isAndroid) {
+        await FlutterDnd.setInterruptionFilter(
+            FlutterDnd.INTERRUPTION_FILTER_ALL);
+      }
     } else {
-      _startFocus();
+      if (Platform.isAndroid) {
+        bool? hasPermission =
+            await FlutterDnd.isNotificationPolicyAccessGranted;
+        if (hasPermission != null && !hasPermission) {
+          FlutterDnd.gotoPolicySettings();
+          return;
+        }
+
+        // Set Android to "Do Not Disturb" mode
+        await FlutterDnd.setInterruptionFilter(
+            FlutterDnd.INTERRUPTION_FILTER_NONE);
+      }
+
+      setState(() {
+        isFocusing = true;
+        startTime = DateTime.now();
+        timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          setState(() {
+            focusDuration += const Duration(seconds: 1);
+          });
+        });
+      });
+
+      if (Platform.isAndroid) {
+        showFocusModeNotification(_formattedTime);
+      } else if (Platform.isIOS) {
+        showIOSDNDInstructions(context);
+      }
     }
   }
 
-  void _startFocus() {
-    setState(() {
-      isFocusing = true;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        setState(() {
-          _seconds++;
-        });
-      });
-    });
-  }
-
-  void _stopFocus() {
-    setState(() {
-      isFocusing = false;
-      _timer?.cancel();
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  Widget buildFocusTimer() {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 213,
+              width: 213,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: const Color(0xff555555),
+                  width: 10.0,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  _formattedTime,
+                  style: const TextStyle(fontSize: 42, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        if (Platform.isAndroid)
+          const Text(
+            'While your focus mode is on, all of your notifications will be off',
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: 177,
+          child: ElevatedButton(
+            onPressed: _startOrStopFocus,
+            child: Text(isFocusing ? 'Stop Focusing' : 'Start Focusing'),
+          ),
+        ),
+        const SizedBox(height: 30),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<FocusModeVm>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -69,155 +150,15 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
             fontFamily: 'latoRegular',
           ),
         ),
+        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 213,
-                    width: 213,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0xff555555),
-                        width: 10.0,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        _formattedTime,
-                        style:
-                            s32BoldWhite.copyWith(fontSize: 42, color: white87),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Text(
-                textAlign: TextAlign.center,
-                'While your focus mode is on, all of your notifications will be off',
-                style: s16RegWhite87.copyWith(
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 177,
-                child: ElevatedButton(
-                  onPressed: _startOrStopFocus,
-                  child: Text(
-                    isFocusing ? 'Stop Focusing' : 'Start Focusing',
-                    style: s16RegWhite87.copyWith(color: appWhite),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Overview',
-                    style: s16RegWhite87.copyWith(fontSize: 20),
-                  ),
-                  Container(
-                    height: 31,
-                    padding: const EdgeInsets.all(7),
-                    decoration: const BoxDecoration(
-                      color: white21,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "This week",
-                            style: s16RegWhite87.copyWith(fontSize: 12),
-                          ),
-                          const SizedBox(width: 5),
-                          const Icon(Icons.arrow_drop_down_outlined,
-                              color: white87, size: 16),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 250,
-                child: SfCartesianChart(
-                  backgroundColor: bgColor,
-                  primaryXAxis: const CategoryAxis(
-                    majorGridLines: MajorGridLines(width: 0),
-                  ),
-                  primaryYAxis: const NumericAxis(
-                    majorGridLines: MajorGridLines(width: 0),
-                  ),
-                  plotAreaBorderWidth: 0,
-                  series: <CartesianSeries>[
-                    ColumnSeries<FocusMode, String>(
-                      dataSource: DummyData.focusData,
-                      xValueMapper: (FocusMode data, _) => data.day,
-                      yValueMapper: (FocusMode data, _) => data.hours,
-                      color: barColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      dataLabelSettings:
-                          const DataLabelSettings(isVisible: true),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('Applications',
-                      style:
-                          s20BoldWhite87.copyWith(fontFamily: 'latoregular')),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const FocusAppCard(
-                appName: 'Instagram',
-                hours: '4h',
-                imageUrl: 'ig_logo.png',
-              ),
-              const FocusAppCard(
-                appName: 'Twitter',
-                hours: '3h',
-                imageUrl: 'twitter_logo.png',
-              ),
-              const FocusAppCard(
-                appName: 'Facebook',
-                hours: '1h',
-                imageUrl: 'fb_logo.png',
-              ),
-              const FocusAppCard(
-                appName: 'Telegram',
-                hours: '30m',
-                imageUrl: 'tg_logo.png',
-              ),
-              const FocusAppCard(
-                appName: 'Gmail',
-                hours: '45m',
-                imageUrl: 'gmail.png',
-              ),
-            ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [buildFocusTimer(), buildFocusOverview(context, vm)],
+            ),
           ),
         ),
       ),

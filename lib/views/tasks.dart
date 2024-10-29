@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:uptodo/models/categories_models.dart';
+import 'package:uptodo/resusable_widgets/alerts.dart';
+import 'package:uptodo/resusable_widgets/update_task_dialog.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/sizes.dart';
 import 'package:uptodo/utils/text_styles.dart';
@@ -8,10 +10,11 @@ import 'package:uptodo/models/task_model.dart';
 import 'package:uptodo/resusable_widgets/category_dialog.dart';
 import 'package:uptodo/resusable_widgets/deletetask_dialog.dart';
 import 'package:uptodo/resusable_widgets/priority_dialog.dart';
-import 'package:uptodo/views/bottom_nav_bar.dart';
+import 'package:uptodo/utils/validators.dart';
+import 'package:uptodo/view-models/task_vm.dart';
 import 'package:uptodo/utils/helperFunctions.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   final Task task;
 
   TaskScreen({
@@ -19,12 +22,20 @@ class TaskScreen extends StatelessWidget {
     required this.task,
   });
 
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
   DateTime? selectedDateTime;
+
   Category? selectedCategory;
+
   int? selectedPriority;
 
   @override
   Widget build(BuildContext context) {
+    bool isSelected = false;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -34,40 +45,30 @@ class TaskScreen extends StatelessWidget {
               _buildActionBar(context),
               const SizedBox(height: 20),
               _buildTaskInfo(context),
-              Row(
-                children: [
-                  const SizedBox(width: 60),
-                  Text(
-                    task.description ?? '',
-                    style: s16RegWhite40.copyWith(color: greyText),
-                  ),
-                ],
-              ),
               const SizedBox(height: 40),
               _buildInfoRow(
                 icon: Icons.timer_outlined,
                 label: 'Task Time:',
-                content: "Today at ${task.time}",
+                content: widget.task.completed == true
+                    ? formatTaskTime(widget.task.updatedAt)
+                    : formatTaskTime(widget.task.time),
               ),
               const SizedBox(height: 30),
               _buildInfoRow(
                 icon: Icons.sell_outlined,
                 label: 'Task Category:',
-                content: task.taskCategory!.name ?? '',
-                leadingWidget: task.taskCategory!.icon,
+                content: widget.task.taskCategory!.name ?? '',
+                leadingWidget: widget.task.taskCategory!.icon,
               ),
               const SizedBox(height: 30),
               _buildInfoRow(
                 icon: Icons.tour_outlined,
                 label: 'Task Priority:',
-                content: task.priority != null ? "${task.priority}" : "Default",
+                content: widget.task.priority != null
+                    ? "${widget.task.priority}"
+                    : "Default",
               ),
               const SizedBox(height: 30),
-              _buildInfoRow(
-                icon: Icons.device_hub_outlined,
-                label: 'Sub-Task:',
-                content: "Add Sub-Task",
-              ),
               const SizedBox(height: 50),
               _buildDeleteButton(context),
             ],
@@ -77,7 +78,9 @@ class TaskScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            _showAddTaskModal(context);
+          },
           child: const Text('Edit Task'),
         ),
       ),
@@ -113,27 +116,59 @@ class TaskScreen extends StatelessWidget {
     );
   }
 
-  // Build the task info section with a checkbox and title
   Widget _buildTaskInfo(BuildContext context) {
+    bool isSelected = false;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Checkbox(
-              value: false,
-              fillColor: WidgetStateProperty.all(const Color(0xff363636)),
-              onChanged: null,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+        Expanded(
+          child: Row(
+            children: [
+              Checkbox(
+                value: widget.task.completed,
+                fillColor: WidgetStateProperty.all(const Color(0xff363636)),
+                onChanged: (bool? value) {
+                  setState(() {
+                    isSelected = value ?? false;
+                  });
+
+                  if (isSelected) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => UpdateTaskDialog(
+                        task: widget.task,
+                      ),
+                    );
+                  }
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              task.title ?? '',
-              style: s20BoldWhite87.copyWith(fontFamily: 'latoRegular'),
-            ),
-          ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.task.title ?? '',
+                      style: s20BoldWhite87.copyWith(fontFamily: 'latoRegular'),
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      maxLines: null,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      widget.task.description ?? '',
+                      style: s16RegWhite40.copyWith(color: greyText),
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         IconButton(
           icon: const Icon(Icons.border_color_outlined, size: 24),
@@ -192,7 +227,8 @@ class TaskScreen extends StatelessWidget {
       onTap: () {
         showDialog(
           context: context,
-          builder: (context) => DeleteTaskDialog(title: task.title ?? ''),
+          builder: (context) => DeleteTaskDialog(
+              title: widget.task.title ?? '', id: widget.task.id),
         );
       },
       child: Container(
@@ -210,6 +246,10 @@ class TaskScreen extends StatelessWidget {
   }
 
   void _showAddTaskModal(BuildContext context) {
+    final vm = Provider.of<TaskVm>(context, listen: false);
+    final formKey = GlobalKey<FormState>();
+    vm.title.text = widget.task.title ?? '';
+    vm.description.text = widget.task.description ?? '';
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -220,82 +260,127 @@ class TaskScreen extends StatelessWidget {
       ),
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Add Task',
-                    style: s32BoldWhite.copyWith(
-                      fontSize: 20,
-                      color: white87,
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Edit Task',
+                      style: s32BoldWhite.copyWith(
+                        fontSize: 20,
+                        color: white87,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              TextFormField(),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Description", style: s18RegGrey),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.timer_outlined, size: 24),
-                        onPressed: () async {
-                          selectedDateTime = await pickDateTime(context);
-                          if (selectedDateTime != null) {
-                            print('Selected DateTime: $selectedDateTime');
-                          }
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        icon: const Icon(Icons.sell_outlined, size: 24),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => CategoryDialog(
-                              onCategorySelected: (category) {
-                                selectedCategory = category;
-                              },
-                            ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Title',
+                      style: s16RegWhite40.copyWith(color: appWhite),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: vm.title,
+                  validator: (value) => validateString(value),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Description',
+                      style: s16RegWhite40.copyWith(color: appWhite),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  maxLines: 4,
+                  controller: vm.description,
+                  validator: (value) => validateString(value),
+                ),
+                const SizedBox(height: 20),
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.timer_outlined, size: 24),
+                          onPressed: () async {
+                            selectedDateTime = await pickDateTime(context);
+                            if (selectedDateTime != null) {
+                              
+                              vm.selectedDateTime = selectedDateTime;
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.sell_outlined, size: 24),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CategoryDialog(
+                                onCategorySelected: (category) {
+                                  selectedCategory = category;
+                                  vm.selectedCategory = selectedCategory;
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.tour_outlined, size: 24),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PriorityDialog(
+                                onPrioritySelected: (priority) {
+                                  selectedPriority = priority;
+                                  vm.selectedPriority = selectedPriority;
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
+                        if (vm.selectedCategory == null ||
+                            vm.selectedDateTime == null ||
+                            vm.selectedPriority == null) {
+                          errorAlert(
+                            'Task time, date, category and priority must be selected',
                           );
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        icon: const Icon(Icons.tour_outlined, size: 24),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PriorityDialog(
-                              onPrioritySelected: (priority) {
-                                selectedPriority = priority;
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  const Icon(Icons.send_outlined, size: 24),
-                ],
-              ),
-            ],
+                          return;
+                        }
+                        vm.updateTask(widget.task);
+                      },
+                      icon: const Icon(Icons.send_outlined, size: 24),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

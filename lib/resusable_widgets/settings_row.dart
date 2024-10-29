@@ -29,6 +29,6 @@ class SettingsRow extends StatelessWidget {
           ),
         ],
       ),
-    );;
+    );
   }
 }

@@ -17,29 +17,29 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 7.5),
-      width: double.infinity,
-      height: 72,
-      decoration: const BoxDecoration(
-        color: white21,
-        borderRadius: BorderRadius.all(
-          Radius.circular(5),
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          () => TaskScreen(task: task),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 7.5),
+        width: double.infinity,
+        height: 72,
+        decoration: const BoxDecoration(
+          color: white21,
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
+          ),
         ),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          Get.to(
-            () => TaskScreen(task: task),
-          );
-        },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Checkbox(
-                value: false,
+                value: task.completed,
                 onChanged: null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
@@ -55,7 +55,9 @@ class TaskCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          formatTaskTime(task.time),
+                          task.completed == true
+                              ? formatTaskTime(task.updatedAt)
+                              : formatTaskTime(task.time),
                           style: s18RegGrey.copyWith(fontSize: 14),
                         ),
                         if (task.taskCategory != null &&
@@ -75,10 +77,8 @@ class TaskCard extends StatelessWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      if (task.taskCategory!.icon != null)
-                                        task.taskCategory!.icon,
-                                      if (task.taskCategory!.icon != null)
-                                        const SizedBox(width: 5),
+                                      task.taskCategory!.icon,
+                                      const SizedBox(width: 5),
                                       Text(task.taskCategory!.name,
                                           style: s12RegWhite),
                                     ],

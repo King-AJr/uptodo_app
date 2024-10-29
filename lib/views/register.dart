@@ -6,7 +6,6 @@ import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
 import 'package:uptodo/utils/validators.dart';
 import 'package:uptodo/view-models/auth_vm.dart';
-import 'package:uptodo/views/bottom_nav_bar.dart';
 import 'package:uptodo/views/login.dart';
 import 'package:provider/provider.dart';
 
@@ -109,6 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: double.infinity,
                   child: OutlinedButton(
                     onPressed: () async {
+                      print('called');
                       final googleUser = await googleSignIn();
                       vm.googleLogin(context, googleUser);
                     },

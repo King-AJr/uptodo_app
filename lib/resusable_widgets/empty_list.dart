@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:uptodo/utils/text_styles.dart';
 
 class EmptyList extends StatelessWidget {
-  const EmptyList({super.key});
+  final String? message;
+  const EmptyList({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class EmptyList extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Text(
-          'What do you want to do Today?',
+          message ?? 'What do you want to do Today?',
           style: s16RegWhite87.copyWith(fontSize: 20),
         ),
         const SizedBox(height: 15),

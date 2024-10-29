@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ars_dialog/ars_dialog.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/calendar/v3.dart' as calendar;
+import 'package:googleapis_auth/auth_io.dart'; 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uptodo/resusable_widgets/loader.dart';
 import 'package:uptodo/utils/colors.dart';
-import 'package:uptodo/utils/getit.dart';
-import 'package:uptodo/view-models/auth_vm.dart';
 
 Color getDarkerShade(Color color, [double factor = 0.5]) {
   // Ensure the factor is between 0 and 1
@@ -108,7 +110,7 @@ Future<void> writeToFile(Map<String, dynamic> jsonData) async {
   }
 }
 
-String formatTaskTime(String? taskTimeStr) {
+String formatTaskTime(String? taskTimeStr, {bool? dateOnly}) {
   if (taskTimeStr == null) {
     return 'No time provided';
   }
@@ -117,20 +119,75 @@ String formatTaskTime(String? taskTimeStr) {
     // Parse the string to DateTime
     final taskTime = DateTime.parse(taskTimeStr);
     final today = DateTime.now();
-    final formatter = DateFormat('HH:mm');
+    final dateFormatter = DateFormat('MMM-dd');
+    final fullDateFormatter = DateFormat('MM-dd');
+    final timeFormatter = DateFormat('HH:mm');
 
-    if (taskTime.year == today.year &&
-        taskTime.month == today.month &&
-        taskTime.day == today.day) {
-      // Task is today
-      return 'Today at ${formatter.format(taskTime)}';
+    if (dateOnly != null && dateOnly == true) {
+      if (taskTime.year == today.year &&
+          taskTime.month == today.month &&
+          taskTime.day == today.day) {
+        // Task is today
+        return 'Today';
+      } else {
+        // Task is not today
+        return dateFormatter.format(taskTime);
+      }
     } else {
-      // Task is not today
-      final dateFormatter = DateFormat('MM-dd');
-      return '${dateFormatter.format(taskTime)} at ${formatter.format(taskTime)}';
+      // Return date and time
+      if (taskTime.year == today.year &&
+          taskTime.month == today.month &&
+          taskTime.day == today.day) {
+        return 'Today at ${timeFormatter.format(taskTime)}';
+      } else {
+        return '${fullDateFormatter.format(taskTime)} at ${timeFormatter.format(taskTime)}';
+      }
     }
   } catch (e) {
     // Handle parsing error
     return 'Invalid date format';
   }
+}
+
+progressLoader(context) => CustomProgressDialog(
+      context,
+      blur: 5,
+      dismissable: false,
+      backgroundColor: primaryColor,
+    );
+
+String formatToHoursAndMinutes(double timeInHours) {
+  // Get the integer part of the hours
+  int hours = timeInHours.floor();
+
+  // Get the fractional part of the hours, multiply by 60 to get minutes
+  int minutes = ((timeInHours - hours) * 60).round();
+
+  // Format and return the result as '4hr 30m' or '0m' if no hours
+  String formattedTime = '';
+
+  if (hours > 0) {
+    formattedTime = '${hours}h';
+  }
+  if (minutes > 0) {
+    formattedTime += formattedTime.isNotEmpty ? ' ${minutes}m' : '${minutes}m';
+  }
+
+  return formattedTime.isNotEmpty ? formattedTime : '0m';
+}
+
+Future<calendar.CalendarApi?> signInWithGoogle() async {
+  final GoogleSignInAccount? googleUser = await GoogleSignIn(
+    scopes: [calendar.CalendarApi.calendarScope],
+  ).signIn();
+
+  if (googleUser != null) {
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final calendar.CalendarApi calendarApi = calendar.CalendarApi(
+      clientViaApiKey(googleAuth.accessToken!),
+    );
+    return calendarApi;
+  }
+  return null;
 }

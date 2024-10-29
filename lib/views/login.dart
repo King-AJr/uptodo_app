@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:uptodo/utils/colors.dart';
+import 'package:uptodo/utils/google_signin.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/custom_textfield.dart';
 import 'package:uptodo/utils/validators.dart';
@@ -100,7 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final googleUser = await googleSignIn();
+                      vm.googleLogin(context, googleUser);
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

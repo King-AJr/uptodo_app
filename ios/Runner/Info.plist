@@ -16,12 +16,22 @@
 	<string>uptodo</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to take a picture.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to upload images.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone for videos</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>App-Prefs</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -50,31 +60,23 @@
 	<key>ClientID</key>
 	<string>371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
-<array>
-    <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>com.example.uptodo</string>
-        </array>
-    </dict>
-    <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>com.googleusercontent.apps.371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f</string>
-        </array>
-    </dict>
-    <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>com.googleusercontent.apps.371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f</string>
-        </array>
-    </dict>
-</array>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.example.uptodo</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.371207593665-lhqgr8r3d54v7neav3dl8i8lgd8fhg4f</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

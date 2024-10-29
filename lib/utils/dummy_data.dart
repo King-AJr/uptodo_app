@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/models/categories_models.dart';
-import 'package:uptodo/models/focus_model.dart';
-import 'package:uptodo/models/task_model.dart';
 
 class DummyData {
   static List<Category> categories = [
@@ -51,52 +49,5 @@ class DummyData {
     ),
   ];
 
-  static List<Task> tasks = [
-    Task(null,
-        title: 'Do Math Homework',
-        time: '16:45',
-        description: '',
-        taskCategory: Category(
-          name: 'University',
-          color: tagPurple,
-          icon: const Icon(
-            Icons.school_outlined,
-            color: Color(0xff0055A3),
-          ),
-        ),
-        priority: 3),
-    Task(null,
-        title: 'Take out Dogs',
-        time: '18:20',
-        taskCategory: Category(
-          name: 'Home',
-          color: appOrange,
-          icon: const Icon(Icons.home, color: Color(0xffA30000)),
-        ),
-        priority: 1,
-        description: 'take the dogs to the park'),
-    Task(null,
-        title: 'Business meeting with the CEO',
-        time: '08:15',
-        taskCategory: Category(
-          name: 'Work',
-          color: appYellow,
-          icon: const Icon(
-            Icons.business_center_outlined,
-            color: Color(0xffA36200),
-          ),
-        ),
-        description: 'meeting concerning the new project',
-        priority: 2),
-  ];
-
-  static List<FocusMode> focusData = [
-    FocusMode('SUN', 2.5),
-    FocusMode('MON', 3.5),
-    FocusMode('TUE', 5.0),
-    FocusMode('WED', 3.0),
-    FocusMode('THU', 4.0),
-    FocusMode('FRI', 4.5),
-    FocusMode('SAT', 2.0),
-  ];
+  
 }

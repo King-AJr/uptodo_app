@@ -8,7 +8,6 @@ import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/models/categories_models.dart';
 import 'package:uptodo/view-models/category_vm.dart';
 import 'package:uptodo/views/add_category.dart';
-import 'package:uptodo/utils/dummy_data.dart';
 
 class CategoryDialog extends StatelessWidget {
   final Function(Category) onCategorySelected;

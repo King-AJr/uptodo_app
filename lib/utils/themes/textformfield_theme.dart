@@ -32,7 +32,7 @@ class MyTextFieldTheme {
     focusedBorder: const OutlineInputBorder().copyWith(
       borderSide: const BorderSide(
         width: 1,
-        color: greyBorder,
+        color: primaryColor,
       ),
     ),
     errorBorder: const OutlineInputBorder().copyWith(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:uptodo/utils/getit.dart';
 import 'package:uptodo/view-models/auth_vm.dart';
 import 'package:uptodo/view-models/category_vm.dart';
+import 'package:uptodo/view-models/focus_vm.dart';
 import 'package:uptodo/view-models/task_vm.dart';
 import 'package:uptodo/views/bottom_nav_bar.dart';
 import 'package:uptodo/views/intro.dart';
@@ -17,7 +18,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthVm()),
         ChangeNotifierProvider(create: (_) => TaskVm()),
-         ChangeNotifierProvider(create: (_) => CategoryVm()),
+        ChangeNotifierProvider(create: (_) => CategoryVm()),
+        ChangeNotifierProvider(create: (_) => FocusModeVm()),
       ],
       child: const MyApp(),
     ),

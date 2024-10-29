@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/sizes.dart';
 import 'package:uptodo/utils/text_styles.dart';
 import 'package:uptodo/resusable_widgets/account_name_dialog.dart';
 import 'package:uptodo/resusable_widgets/change_image_modal.dart';
-import 'package:uptodo/resusable_widgets/change_password_dialog.dart';
 import 'package:uptodo/resusable_widgets/settings_row.dart';
+import 'package:uptodo/view-models/auth_vm.dart';
+import 'package:uptodo/view-models/task_vm.dart';
+import 'package:uptodo/views/change_password.dart';
+import 'package:uptodo/views/login.dart';
 import 'package:uptodo/views/settings.dart';
+import 'package:uptodo/utils/getit.dart';
+import 'package:uptodo/utils/storage.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final avm = Provider.of<AuthVm>(context);
+    final tvm = Provider.of<TaskVm>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -46,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Martha Hays', style: s20BoldWhite87),
+                  Text(avm.userResponse!.name ?? '', style: s20BoldWhite87),
                 ],
               ),
               const SizedBox(height: 10),
@@ -68,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "10 Task left",
+                              "${tvm.filteredIncompleteTasks.length} Task left today",
                               style: s16RegWhite87.copyWith(color: appWhite),
                             ),
                           ],
@@ -94,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "5 task done",
+                              "${tvm.filteredCompletedTasks.length} task done today",
                               style: s16RegWhite87.copyWith(color: appWhite),
                             ),
                           ],
@@ -150,10 +158,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   title: 'Change account password',
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const ChangePasswordDialog(),
-                    );
+                    Get.to(() => const ChangePassword());
                   }),
               SettingsRow(
                   icon: const Icon(
@@ -208,18 +213,26 @@ class ProfileScreen extends StatelessWidget {
                 title: 'Support us',
               ),
               const SizedBox(height: 20),
-              Container(
-                color: bgColor,
-                child: Row(
-                  children: [
-                    const Icon(Icons.logout_outlined,
-                        size: Sizes.iconSize, color: appRed),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Log out',
-                      style: s16RegWhite40.copyWith(color: appRed),
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () async {
+                  await getIt.get<LocalStorageService>().setString('name', '');
+                  await getIt.get<LocalStorageService>().setString('email', '');
+                  await getIt.get<LocalStorageService>().setString('token', '');
+                  Get.offAll(() => const LoginScreen());
+                },
+                child: Container(
+                  color: bgColor,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.logout_outlined,
+                          size: Sizes.iconSize, color: appRed),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Log out',
+                        style: s16RegWhite40.copyWith(color: appRed),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -47,7 +47,7 @@ String? validatePassword(String? value) {
   return null;
 }
 
-String? confirmPassword(String password, String value) {
+String? confirmPassword(String password, String? value) {
   if (value != password) {
     return 'Password does not match';
   }

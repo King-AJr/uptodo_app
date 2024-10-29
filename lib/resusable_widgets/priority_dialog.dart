@@ -105,6 +105,7 @@ class _PriorityDialogState extends State<PriorityDialog> {
           ),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.tour_outlined,
                 size: Sizes.iconSize, color: appWhite),

@@ -1,5 +1,6 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:uptodo/utils/colors.dart';
 import 'package:uptodo/utils/text_styles.dart';
@@ -63,18 +64,17 @@ class _AddCategoryState extends State<AddCategory> {
                 const SizedBox(width: 10),
                 GestureDetector(
                   onTap: () async {
-                    IconData? icon = await showIconPicker(
-                      context,
-                      iconColor: selectedColor,
-                      iconPackModes: [IconPack.material],
-                      title: Text('Pick an icon', style: s16RegWhite87),
-                    );
-                    if (icon != null) {
-                      setState(() {
-                        selectedIcon = icon;
-                      });
-                    }
-                  },
+                    IconData? icon = Icons.flutter_dash;
+                    //await showIconPicker(
+                    //   context,
+                    //   iconColor: selectedColor,
+                    //   iconPackModes: [IconPack.material],
+                    //   title: Text('Pick an icon', style: s16RegWhite87),
+                    // );
+                    setState(() {
+                      selectedIcon = icon;
+                    });
+                                    },
                   child: Container(
                     height: 37,
                     width: 154,
